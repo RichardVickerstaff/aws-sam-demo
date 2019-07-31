@@ -8,33 +8,56 @@ Globals:
   Function:
     Timeout: 3
 Outputs:
+  FetchFunction:
+    Description: FetchFunction Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - FetchFunction
+      - Arn
+  FetchFunctionIamRole:
+    Description: Implicit IAM Role created for FetchFunction function
+    Value:
+      Fn::GetAtt:
+      - FetchFunctionRole
+      - Arn
   HelloWorldApi:
     Description: API Gateway endpoint URL for Prod stage for Hello World function
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/list/
+  ListFunction:
+    Description: ListFunction Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - HelloWorldFunction
+      - ListFunction
       - Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
+  ListFunctionIamRole:
+    Description: Implicit IAM Role created for ListFunction function
     Value:
       Fn::GetAtt:
-      - HelloWorldFunctionRole
+      - ListFunctionRole
       - Arn
 Resources:
-  HelloWorldFunction:
+  FetchFunction:
     Properties:
-      CodeUri: s3://sam-app-qa/eb347d153f44621d7e80e23395c48592
+      CodeUri: s3://sam-app-qa/181be6b29851ea83b3912f68e0abdacb
       Events:
-        HelloWorld:
+        Fetch:
+          Properties:
+            Schedule: rate(1 hour)
+          Type: Schedule
+      Handler: app.fetch_handler
+      Runtime: ruby2.5
+    Type: AWS::Serverless::Function
+  ListFunction:
+    Properties:
+      CodeUri: s3://sam-app-qa/241314b3df52b77d9ad1a9b27bbe6932
+      Events:
+        List:
           Properties:
             Method: get
-            Path: /hello
+            Path: /list
           Type: Api
-      Handler: app.lambda_handler
+      Handler: app.list_handler
       Runtime: ruby2.5
     Type: AWS::Serverless::Function
 Transform: AWS::Serverless-2016-10-31

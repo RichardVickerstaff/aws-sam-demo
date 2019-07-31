@@ -2,6 +2,14 @@ require 'aws-record'
 require 'httparty'
 require 'json'
 
+aws_id = ''
+secret_key =''
+
+Aws.config.update({
+  region: 'eu-west-2',
+  credentials: Aws::Credentials.new(aws_id, secret_key)
+})
+
 class Currency
   include Aws::Record
   integer_attr :id, hash_key: true

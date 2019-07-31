@@ -19,10 +19,9 @@ Resources:
       Runtime: ruby2.5
       Events:
         Fetch:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Schedule
           Properties:
-            Path: /fetch
-            Method: get
+            Schedule: rate(1 hour)
   ListFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -42,10 +41,16 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/list/"
+  FetchFunction:
+    Description: "FetchFunction Lambda Function ARN"
+    Value: !GetAtt FetchFunction.Arn
+  FetchFunctionIamRole:
+    Description: "Implicit IAM Role created for FetchFunction function"
+    Value: !GetAtt FetchFunctionRole.Arn
+  ListFunction:
+    Description: "ListFunction Lambda Function ARN"
+    Value: !GetAtt ListFunction.Arn
+  ListFunctionIamRole:
+    Description: "Implicit IAM Role created for ListFunction function"
+    Value: !GetAtt ListFunctionRole.Arn

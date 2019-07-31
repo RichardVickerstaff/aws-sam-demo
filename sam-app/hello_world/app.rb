@@ -1,38 +1,36 @@
-# require 'httparty'
+require 'aws-record'
+require 'httparty'
 require 'json'
 
-def lambda_handler(event:, context:)
-  # Sample pure Lambda function
+class Currency
+  include Aws::Record
+  integer_attr :id, hash_key: true
+  string_attr  :base
+  float_attr   :aud
+  float_attr   :mad
+end
 
-  # Parameters
-  # ----------
-  # event: Hash, required
-  #     API Gateway Lambda Proxy Input Format
-  #     Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
-
-  # context: object, required
-  #     Lambda Context runtime methods and attributes
-  #     Context doc: https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
-
-  # Returns
-  # ------
-  # API Gateway Lambda Proxy Output Format: dict
-  #     'statusCode' and 'body' are required
-  #     # api-gateway-simple-proxy-for-lambda-output-format
-  #     Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-
-  # begin
-  #   response = HTTParty.get('http://checkip.amazonaws.com/')
-  # rescue HTTParty::Error => error
-  #   puts error.inspect
-  #   raise error
-  # end
+def fetch_handler(event:, context:)
+  api_key = ''
+  response = HTTParty.get("http://data.fixer.io/api/latest?access_key=#{api_key}&symbols=AUD,MAD&format=1")
+  body = JSON.parse(response.body)
+  currency = Currency.find(id: body['timestamp'], base: body['base']) || Currency.new(id: body['timestamp'], base: body['base'])
+  currency.aud = body['rates']['AUD']
+  currency.mad = body['rates']['MAD']
+  currency.save
 
   {
     statusCode: 200,
-    body: {
-      message: "Hello World!",
-      # location: response.body
-    }.to_json
+    body: currency.to_h.to_json
+  }
+end
+
+def list_handler(event:, context:)
+  scan = Currency.build_scan.complete!
+  body = scan.map { |item| { id: item.id, base: item.base, aud: item.aud, mad: item.mad } }
+
+  {
+    statusCode: 200,
+    body: body.to_json
   }
 end

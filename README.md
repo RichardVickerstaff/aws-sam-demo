@@ -1,6 +1,6 @@
 # AWS lambda example
 
-This project is an example of using AWS serverless infrastructure to create a three tier application. It uses DynamoDB as it’s backend store, lambda as the mechanism of pulling data from a 3rd party API and then exposed via an API gateway.
+This project is an example of using AWS serverless infrastructure to create a three tier application. It uses DynamoDB as it’s backend store, lambda as the mechanism of pulling data from a [3rd party API](https://fixer.io/) and then exposed via an API gateway.
 
 There is also an S3 bucket hosting a static webpage that consumes the lambda api, and that can be found  here: [https://richards-lambda-test-qa.s3.eu-west-2.amazonaws.com/index.html](https://richards-lambda-test-qa.s3.eu-west-2.amazonaws.com/index.html)
 

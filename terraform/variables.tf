@@ -5,3 +5,5 @@ variable "aws_keys" {
 variable "aws_secrets" {
   type = "map"
 }
+
+variable "domain_name" {}

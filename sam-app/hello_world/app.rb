@@ -35,10 +35,20 @@ end
 
 def list_handler(event:, context:)
   scan = Currency.build_scan.complete!
-  body = scan.map { |item| { id: item.id, base: item.base, aud: item.aud, mad: item.mad } }
+  body = {
+    labels: scan.map { |item| Time.at(item.id) },
+    mad: scan.map { |item| { x: item.id, y: item.mad } },
+    aud: scan.map { |item| { x: item.id, y: item.aud } },
+  }
 
   {
     statusCode: 200,
-    body: body.to_json
+    body: body.to_json,
+    headers: {
+      "Access-Control-Allow-Headers" => 'Content-Type',
+      "Access-Control-Allow-Origin" => '*',
+      "Access-Control-Allow-Origin" => 'null',
+      "Access-Control-Allow-Methods" => 'POST,GET,OPTIONS'
+    }
   }
 end

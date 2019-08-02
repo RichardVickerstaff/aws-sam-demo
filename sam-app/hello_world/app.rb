@@ -46,8 +46,7 @@ def list_handler(event:, context:)
     body: body.to_json,
     headers: {
       "Access-Control-Allow-Headers" => 'Content-Type',
-      "Access-Control-Allow-Origin" => '*',
-      "Access-Control-Allow-Origin" => 'null',
+      "Access-Control-Allow-Origin" => 'https://richards-lambda-test-qa.s3.eu-west-2.amazonaws.com',
       "Access-Control-Allow-Methods" => 'POST,GET,OPTIONS'
     }
   }

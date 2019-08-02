@@ -39,7 +39,7 @@ Outputs:
 Resources:
   FetchFunction:
     Properties:
-      CodeUri: s3://sam-app-qa/34c156f38ddd5b66deb24c713123385f
+      CodeUri: s3://sam-app-qa/05f9290e4319f5b7718ef7a346a6c9ee
       Events:
         Fetch:
           Properties:
@@ -50,7 +50,7 @@ Resources:
     Type: AWS::Serverless::Function
   ListFunction:
     Properties:
-      CodeUri: s3://sam-app-qa/10c8116981da52a414e5c3c67fbc65f7
+      CodeUri: s3://sam-app-qa/dd9195b4e3a90226bc815842986dc5c3
       Events:
         List:
           Properties:
